@@ -6,6 +6,9 @@
 //This class gathers information from the Node where it is deployed,
 //then sends that information back to the central node via LCM.
 
+#ifndef NODE_MONITOR
+#define NODE_MONITOR
+
 #include <string>
 #include <sys/vfs.h> //Used to obtain file system usage info
 
@@ -24,3 +27,5 @@ class NodeMonitor{
         getNetworkUsage();
 
 };
+
+#endif NODE_MONITOR
