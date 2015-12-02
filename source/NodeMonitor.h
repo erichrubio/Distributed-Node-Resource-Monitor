@@ -6,39 +6,39 @@
 //This class gathers information from the Node where it is deployed,
 //then sends that information back to the central node via LCM.
 
-#ifndef NODEMONITOR_H
-#define NODEMONITOR_H
+#ifndef NODE_MONITOR_H
+#define NODE_MONITOR_H
 
 #include <string>
+#include <iostream>
+#include <fstream>
 #include <sys/vfs.h> //Used to obtain file system usage info
 
 
 
 class NodeMonitor{
-	private:
+	private:	
 		//LCM target URL
-		std::string lcm_url;
+		//const LCM_DEFAULT URL = ""
 
+	public:
+		
 		//Calculate memory usage % 
 		//(MemAvailable / MemTotal)
-		double getMemUsage();
+		static double getMemUsage();
 
 		//Calculate storage usage % 
 		//(Available Blocks / Total Blocks)
-		double getStorageUsage();
+		static double getStorageUsage();
 
 		//Calculate CPU usage %
 		//formula here
-		double getCpuUsage();
+		static double getCpuUsage();
 
 		//Calculate network usage %
 		//formula here
-		double getNetworkUsage();
+		static double getNetworkUsage();
 	
-
-	public:
-
-
 };
 
 #endif

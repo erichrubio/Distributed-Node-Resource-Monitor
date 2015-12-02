@@ -1,4 +1,6 @@
-#include <NodeMonitor.h.gch>
+#include "NodeMonitor.h"
+#include <iostream>
+#include <fstream>
 
 
 //grabs the first 3 lines from /proc/meminfo
@@ -25,17 +27,25 @@ double NodeMonitor::getMemUsage(){
 	}
 }
 
-ulong_t NodeMonitor::getStorageInfo(){
+double NodeMonitor::getStorageUsage(){
 	struct statfs buf;
-	const char* path = "/";
+	const char* path = "/home";
 	int retval = statfs(path, &buf);
 
 	if(statfs(path, &buf) == 0){
-		return (buf.f_bavail / buf.f_blocks);
+		return ((double)buf.f_bavail) /((double) buf.f_blocks);
 	}
 	else{
 		std::cout << "error in statfs" << std::endl;
 		return 0.0;
 	}
 }
- 
+
+
+int main(){
+
+	std::cout << "Current mem usage: " << NodeMonitor::getMemUsage() << std::endl;
+	std::cout << "Current storage usage: " << NodeMonitor::getStorageUsage() << std::endl;
+
+return 0;
+} 
