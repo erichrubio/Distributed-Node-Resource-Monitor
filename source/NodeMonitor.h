@@ -13,13 +13,16 @@
 #include <iostream>
 #include <fstream>
 #include <sys/vfs.h> //Used to obtain file system usage info
-
-
+#include <lcm/lcm-cpp.hpp>
+#include "nodeLCM/sysresource_t.hpp"
 
 class NodeMonitor{
 	private:	
 		//LCM target URL
 		//const LCM_DEFAULT URL = ""
+		
+		nodeLCM::sysresource_t data;
+		const std::string nodeID = "node_X";
 
 	public:
 		

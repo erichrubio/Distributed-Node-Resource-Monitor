@@ -1,7 +1,7 @@
 #include "NodeMonitor.h"
 #include <iostream>
 #include <fstream>
-
+#include <lcm/lcm-cpp.hpp>
 
 //grabs the first 3 lines from /proc/meminfo
 //In order: MemTotal, MemFree, MemAvailable

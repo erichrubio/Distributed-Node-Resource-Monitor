@@ -1,0 +1,10 @@
+package nodeLCM;
+
+struct sysresource_t
+{
+		double memUsage;
+		double storageUsage;
+		double cpuUsage;
+		int32_t networkUsage[4];
+
+}
