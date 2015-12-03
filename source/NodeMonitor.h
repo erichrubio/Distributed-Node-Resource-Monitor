@@ -17,31 +17,31 @@
 #include "nodeLCM/sysresource_t.hpp"
 
 class NodeMonitor{
-	private:	
-		//LCM target URL
-		//const LCM_DEFAULT URL = ""
-		
-		nodeLCM::sysresource_t data;
-		const std::string nodeID = "node_X";
+  private:  
+    //LCM target URL
+    //const LCM_DEFAULT URL = ""
+    
+    nodeLCM::sysresource_t data;
+    const std::string nodeID = "node_X";
 
-	public:
-		
-		//Calculate memory usage % 
-		//(MemAvailable / MemTotal)
-		static double getMemUsage();
+  public:
+    
+    //Calculate memory usage % 
+    //(MemAvailable / MemTotal)
+    static double getMemUsage();
 
-		//Calculate storage usage % 
-		//(Available Blocks / Total Blocks)
-		static double getStorageUsage();
+    //Calculate storage usage % 
+    //(Available Blocks / Total Blocks)
+    static double getStorageUsage();
 
-		//Calculate CPU usage %
-		//formula here
-		static double getCpuUsage();
+    //Calculate CPU usage %
+    //formula here
+    static double getCpuUsage();
 
-		//Calculate network usage %
-		//formula here
-		static double getNetworkUsage();
-	
+    //Calculate network usage %
+    //formula here
+    static double getNetworkUsage();
+  
 };
 
 #endif
