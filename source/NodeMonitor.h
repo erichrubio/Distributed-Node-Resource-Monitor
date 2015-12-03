@@ -13,6 +13,8 @@
 #include <iostream>
 #include <fstream>
 #include <sys/vfs.h> //Used to obtain file system usage info
+#include "nodeLCM/sysresource_t.hpp"
+#include <lcm/lcm-cpp.hpp>
 
 struct network_usage
 {
@@ -20,7 +22,7 @@ struct network_usage
   int packets_received;
   int bytes_sent;
   int bytes_received;
-
+  
   void print(){
     std::cout << "\tBytes received: " << bytes_received << std::endl;
     std::cout << "\tPackets received: " << packets_received << std::endl;
@@ -39,6 +41,9 @@ class NodeMonitor{
  private:	
   //LCM target URL
   //const LCM_DEFAULT URL = ""
+
+  static const std::string nodeID;
+  nodeLCM::sysresource_t data;
 
   // CPU constants
   static const int NUM_OF_CPU_COLS = 7;
@@ -70,7 +75,7 @@ class NodeMonitor{
   // Calculate network usage
   // Bytes sent & received, packets sent & received
   static network_usage getNetworkUsage();
-	
+
 };
 
 #endif
