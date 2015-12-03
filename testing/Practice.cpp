@@ -19,13 +19,13 @@ int SENT_PACKETS_INDEX = 9;
 
 network_usage getNetworkUsage()
 {
-  std::ifstream cpufile("/proc/net/dev");
-  if (cpufile.is_open())
+  std::ifstream networkfile("/proc/net/dev");
+  if (networkfile.is_open())
   {
     // Pull "cpu" from file
     std::string garbage;
     int index = 0;
-    while(cpufile >> garbage && index < NUM_OF_NETWORK_JUNK_LINES)
+    while(networkfile >> garbage && index < NUM_OF_NETWORK_JUNK_LINES)
       { 
 	/* Remove unnecessary text */
 	index++;
@@ -37,7 +37,7 @@ network_usage getNetworkUsage()
     int packetsSent;
     int bytesReceived;
     int bytesSent;
-    while(cpufile >> num)
+    while(networkfile >> num)
       {
 	if(index == RECEIVED_BYTES_INDEX)
 	  { bytesReceived = num; }

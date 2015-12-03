@@ -14,30 +14,62 @@
 #include <fstream>
 #include <sys/vfs.h> //Used to obtain file system usage info
 
+struct network_usage
+{
+  int packets_sent;
+  int packets_received;
+  int bytes_sent;
+  int bytes_received;
 
+  void print(){
+    std::cout << "\tBytes received: " << bytes_received << std::endl;
+    std::cout << "\tPackets received: " << packets_received << std::endl;
+    std::cout << "\tBytes sent: " << bytes_sent << std::endl;
+    std::cout << "\tPackets sent: " << packets_sent << std::endl;
+  }
+};
+
+struct cpu_usage
+{
+  int nonidle;
+  int total;
+};
 
 class NodeMonitor{
-	private:	
-		//LCM target URL
-		//const LCM_DEFAULT URL = ""
+ private:	
+  //LCM target URL
+  //const LCM_DEFAULT URL = ""
 
-	public:
+  // CPU constants
+  static const int NUM_OF_CPU_COLS = 7;
+  
+  // Network constants
+  static const int NUM_OF_NETWORK_JUNK_LINES = 20;
+  static const int RECEIVED_BYTES_INDEX = 0;
+  static const int RECEIVED_PACKETS_INDEX = 1;
+  static const int SENT_BYTES_INDEX = 8;
+  static const int SENT_PACKETS_INDEX = 9; 
+
+  // Returns cpu_usage containing cpu stats at time of method call
+  static cpu_usage getCurrentCpuStats();
+  
+ public:
 		
-		//Calculate memory usage % 
-		//(MemAvailable / MemTotal)
-		static double getMemUsage();
+  // Calculate memory usage % 
+  // (MemAvailable / MemTotal)
+  static double getMemUsage();
 
-		//Calculate storage usage % 
-		//(Available Blocks / Total Blocks)
-		static double getStorageUsage();
+  // Calculate storage usage % 
+  // (Available Blocks / Total Blocks)
+  static double getStorageUsage();
 
-		//Calculate CPU usage %
-		//formula here
-		static double getCpuUsage();
+  // Calculate CPU usage %
+  // delta of (Non-idle processes)/(Total processes)
+  static double getCpuUsage();
 
-		//Calculate network usage %
-		//formula here
-		static double getNetworkUsage();
+  // Calculate network usage
+  // Bytes sent & received, packets sent & received
+  static network_usage getNetworkUsage();
 	
 };
 
