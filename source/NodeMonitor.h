@@ -41,8 +41,11 @@ class NodeMonitor{
  private:	
   //LCM target URL
   //const LCM_DEFAULT URL = ""
-
+  
+  //string to identify current node
   static const std::string nodeID;
+
+  //LCM struct, holds system info
   nodeLCM::sysresource_t data;
 
   // CPU constants
@@ -84,6 +87,8 @@ class NodeMonitor{
   // Calculate network usage
   // Bytes sent & received, packets sent & received
   network_usage getNetworkUsage();
+
+  // update data fields and send data via LCM
 
 };
 

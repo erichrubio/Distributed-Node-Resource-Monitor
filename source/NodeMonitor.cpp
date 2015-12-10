@@ -19,6 +19,7 @@ NodeMonitor::NodeMonitor()
 
 //grabs the first 3 lines from /proc/meminfo
 //In order: MemTotal, MemFree, MemAvailable
+//Discards MemFree, returns MemAvailable/MemTotal
 double NodeMonitor::getMemUsage(){
   std::ifstream memFile ("/proc/meminfo");
 
@@ -41,6 +42,8 @@ double NodeMonitor::getMemUsage(){
   }
 }
 
+//Uses statfs() to pull system storage information
+//Returns Available Blocks / Total Blocks
 double NodeMonitor::getStorageUsage(){
   struct statfs buf;
   const char* path = "/home";
@@ -98,6 +101,9 @@ double NodeMonitor::getCpuUsage(){
 
   double total = (double)(currentStats.total - lastCpuStats.total);
   double nonidle = (double)(currentStats.nonidle - lastCpuStats.nonidle);
+
+  lastCpuStats.total = currentStats.total;
+  lastCpuStats.nonidle = currentStats.nonidle;
 
   return nonidle/total;
 }
@@ -165,8 +171,8 @@ void printStats(NodeMonitor &nm){
 int main(){
   NodeMonitor nm;
   printStats(nm);
-  // Sleep for one second
-  unsigned int seconds = 1;
+  // Sleep for 5 seconds
+  unsigned int seconds = 5;
   sleep(seconds);
   printStats(nm);
   sleep(seconds);
