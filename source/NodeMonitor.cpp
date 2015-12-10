@@ -5,13 +5,10 @@
 #include <lcm/lcm-cpp.hpp>
 #include "nodeLCM/sysresource_t.hpp"
 
-
-const std::string NodeMonitor::nodeID = "node_X";
-
 NodeMonitor::NodeMonitor()
 {
   std::cout << "Please enter an identifying tag for this node: ";
-  std::cin >> nm.nodeID;
+  std::cin >> data.nodeID;
   
   //Initializes data in lastNetworkStats struct
   getNetworkUsage();
@@ -179,32 +176,38 @@ void NodeMonitor::publishData(nodeLCM::sysresource_t &data){
 
 }
 
-void printStats(NodeMonitor &nm){
-  std::cout << "Current mem usage: " << nm.getMemUsage() << std::endl;
-  std::cout << "Current storage usage: " << nm.getStorageUsage() << std::endl;
-  std::cout << "Current cpu usage: " << nm.getCpuUsage() << std::endl;
+void NodeMonitor::printStats(){
+  std::cout << "Current mem usage: " << getMemUsage() << std::endl;
+  std::cout << "Current storage usage: " << getStorageUsage() << std::endl;
+  std::cout << "Current cpu usage: " << getCpuUsage() << std::endl;
   std::cout << "Current network usage: " << std::endl;
-  nm.getNetworkUsage().print();
+  getNetworkUsage().print();
 }
 
 int main(){
   
-  lcm::LCM lcm;
+  /*lcm::LCM lcm;
   if(!lcm.good()){
     std::cout << "Error creating LCM connection" << std::endl;
     return 1;
-  }
-
-  NodeMonitor nm;
+  }*/
   
+  NodeMonitor nm;
 
-  printStats(nm);
-  // Sleep for 5 seconds
+  // Make loop
+  // load data into "data" member
+  
+      
   unsigned int seconds = 5;
+
   sleep(seconds);
-  printStats(nm);
+  nm.printStats();
+
   sleep(seconds);
-  printStats(nm);
+  nm.printStats();
+
+  sleep(seconds);
+  nm.printStats();
   
   return 0;
 } 
