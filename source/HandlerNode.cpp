@@ -59,6 +59,9 @@ public:
 	}
       std::cout << "\tBytes Sent: " << msg->networkUsage[2] << std::endl;
       std::cout << "\tPackets Sent: " << msg->networkUsage[3] << std::endl;
+    //extra new lines for cleaner spacing in console    
+    std::cout << std::endl << std::endl;
+
     }
 
 };
