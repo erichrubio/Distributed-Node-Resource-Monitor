@@ -18,10 +18,11 @@
 
 struct network_usage
 {
+  int bytes_received;
   int packets_sent;
   int packets_received;
   int bytes_sent;
-  int bytes_received;
+
   
   void print(){
     std::cout << "\tBytes received: " << bytes_received << std::endl;
@@ -41,9 +42,6 @@ class NodeMonitor{
  private:	
   //LCM target URL
   //const LCM_DEFAULT URL = ""
-  
-  //string to identify current node
-  static const std::string nodeID;
 
   //LCM struct, holds system info
   nodeLCM::sysresource_t data;
@@ -87,6 +85,9 @@ class NodeMonitor{
   // Calculate network usage
   // Bytes sent & received, packets sent & received
   network_usage getNetworkUsage();
+
+  // Prints current resource stats
+  void printStats();
 
   // update data fields and send data via LCM
   void publishData(nodeLCM::sysresource_t &data);
