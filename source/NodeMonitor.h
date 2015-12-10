@@ -89,7 +89,7 @@ class NodeMonitor{
   network_usage getNetworkUsage();
 
   // update data fields and send data via LCM
-
+  void publishData(nodeLCM::sysresource_t &data);
 };
 
 #endif

@@ -3,11 +3,23 @@
 #include <fstream>
 #include <unistd.h>
 #include <lcm/lcm-cpp.hpp>
+#include "nodeLCM/sysresource_t.hpp"
+
 
 const std::string NodeMonitor::nodeID = "node_X";
 
 NodeMonitor::NodeMonitor()
 {
+  std::cout << "Please enter an identifying tag for this node: ";
+  std::cin >> nm.nodeID;
+  
+  //Initializes data in lastNetworkStats struct
+  getNetworkUsage();
+
+  //Initializes data in lastCpuStats struct
+  getCpuUsage();
+
+  /*
   lastNetworkStats.bytes_received = 0;
   lastNetworkStats.packets_received = 0;
   lastNetworkStats.bytes_sent = 0;
@@ -15,6 +27,8 @@ NodeMonitor::NodeMonitor()
 
   lastCpuStats.nonidle = 0;
   lastCpuStats.total = 0;
+  */
+
 }
 
 //grabs the first 3 lines from /proc/meminfo
@@ -160,6 +174,11 @@ network_usage NodeMonitor::getNetworkUsage(){
     }
 }
 
+void NodeMonitor::publishData(nodeLCM::sysresource_t &data){
+  
+
+}
+
 void printStats(NodeMonitor &nm){
   std::cout << "Current mem usage: " << nm.getMemUsage() << std::endl;
   std::cout << "Current storage usage: " << nm.getStorageUsage() << std::endl;
@@ -169,7 +188,16 @@ void printStats(NodeMonitor &nm){
 }
 
 int main(){
+  
+  lcm::LCM lcm;
+  if(!lcm.good()){
+    std::cout << "Error creating LCM connection" << std::endl;
+    return 1;
+  }
+
   NodeMonitor nm;
+  
+
   printStats(nm);
   // Sleep for 5 seconds
   unsigned int seconds = 5;

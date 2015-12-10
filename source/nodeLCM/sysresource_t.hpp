@@ -9,6 +9,7 @@
 #ifndef __nodeLCM_sysresource_t_hpp__
 #define __nodeLCM_sysresource_t_hpp__
 
+#include <string>
 
 namespace nodeLCM
 {
@@ -16,6 +17,8 @@ namespace nodeLCM
 class sysresource_t
 {
     public:
+        std::string nodeID;
+
         double     memUsage;
 
         double     storageUsage;
@@ -120,6 +123,10 @@ int sysresource_t::_encodeNoHash(void *buf, int offset, int maxlen) const
 {
     int pos = 0, tlen;
 
+    char* nodeID_cstr = (char*) this->nodeID.c_str();
+    tlen = __string_encode_array(buf, offset + pos, maxlen - pos, &nodeID_cstr, 1);
+    if(tlen < 0) return tlen; else pos += tlen;
+
     tlen = __double_encode_array(buf, offset + pos, maxlen - pos, &this->memUsage, 1);
     if(tlen < 0) return tlen; else pos += tlen;
 
@@ -139,6 +146,13 @@ int sysresource_t::_decodeNoHash(const void *buf, int offset, int maxlen)
 {
     int pos = 0, tlen;
 
+    int32_t __nodeID_len__;
+    tlen = __int32_t_decode_array(buf, offset + pos, maxlen - pos, &__nodeID_len__, 1);
+    if(tlen < 0) return tlen; else pos += tlen;
+    if(__nodeID_len__ > maxlen - pos) return -1;
+    this->nodeID.assign(((const char*)buf) + offset + pos, __nodeID_len__ - 1);
+    pos += __nodeID_len__;
+
     tlen = __double_decode_array(buf, offset + pos, maxlen - pos, &this->memUsage, 1);
     if(tlen < 0) return tlen; else pos += tlen;
 
@@ -157,6 +171,7 @@ int sysresource_t::_decodeNoHash(const void *buf, int offset, int maxlen)
 int sysresource_t::_getEncodedSizeNoHash() const
 {
     int enc_size = 0;
+    enc_size += this->nodeID.size() + 4 + 1;
     enc_size += __double_encoded_array_size(NULL, 1);
     enc_size += __double_encoded_array_size(NULL, 1);
     enc_size += __double_encoded_array_size(NULL, 1);
@@ -166,7 +181,7 @@ int sysresource_t::_getEncodedSizeNoHash() const
 
 uint64_t sysresource_t::_computeHash(const __lcm_hash_ptr *)
 {
-    uint64_t hash = 0xe9a56996eeff2f57LL;
+    uint64_t hash = 0xa9ff247b5a119f9cLL;
     return (hash<<1) + ((hash>>63)&1);
 }
 
