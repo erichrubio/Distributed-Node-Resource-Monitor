@@ -69,6 +69,7 @@ double NodeMonitor::getStorageUsage(){
   }
 }
 
+// Gets CPU data from /proc/stat
 cpu_usage NodeMonitor::getCurrentCpuStats(){
   std::ifstream cpufile("/proc/stat");
   if (cpufile.is_open())
@@ -106,6 +107,7 @@ cpu_usage NodeMonitor::getCurrentCpuStats(){
     }
 }
 
+// Calculates CPU usage from last recording
 double NodeMonitor::getCpuUsage(){
   cpu_usage currentStats;
   currentStats = getCurrentCpuStats();
@@ -119,6 +121,7 @@ double NodeMonitor::getCpuUsage(){
   return nonidle/total;
 }
 
+// Retrieves network stats from /proc/net/dev
 network_usage NodeMonitor::getNetworkUsage(){
   std::ifstream networkfile("/proc/net/dev");
   if (networkfile.is_open())
@@ -194,8 +197,6 @@ int main(){
   
   NodeMonitor nm;
 
-  // Make loop
-  // load data into "data" member
   
       
   unsigned int seconds = 5;
