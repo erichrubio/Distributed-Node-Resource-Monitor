@@ -4,8 +4,7 @@ struct sysresource_t
 {
     string nodeID;
     double memUsage;
-		double storageUsage;
-		double cpuUsage;
-		int32_t networkUsage[4];
-
+    double storageUsage;
+    double cpuUsage;
+    int32_t networkUsage[4];
 }
