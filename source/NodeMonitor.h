@@ -47,34 +47,43 @@ class NodeMonitor{
 
   // CPU constants
   static const int NUM_OF_CPU_COLS = 7;
+
+  // CPU Stats
+  cpu_usage lastCpuStats;
   
   // Network constants
   static const int NUM_OF_NETWORK_JUNK_LINES = 20;
   static const int RECEIVED_BYTES_INDEX = 0;
   static const int RECEIVED_PACKETS_INDEX = 1;
   static const int SENT_BYTES_INDEX = 8;
-  static const int SENT_PACKETS_INDEX = 9; 
+  static const int SENT_PACKETS_INDEX = 9;
+
+  // Network Stats
+  network_usage lastNetworkStats;
 
   // Returns cpu_usage containing cpu stats at time of method call
-  static cpu_usage getCurrentCpuStats();
+  cpu_usage getCurrentCpuStats();
   
  public:
+
+  // Default constructor
+  NodeMonitor();
 		
   // Calculate memory usage % 
   // (MemAvailable / MemTotal)
-  static double getMemUsage();
+  double getMemUsage();
 
   // Calculate storage usage % 
   // (Available Blocks / Total Blocks)
-  static double getStorageUsage();
+  double getStorageUsage();
 
   // Calculate CPU usage %
   // delta of (Non-idle processes)/(Total processes)
-  static double getCpuUsage();
+  double getCpuUsage();
 
   // Calculate network usage
   // Bytes sent & received, packets sent & received
-  static network_usage getNetworkUsage();
+  network_usage getNetworkUsage();
 
 };
 

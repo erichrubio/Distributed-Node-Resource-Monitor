@@ -6,6 +6,17 @@
 
 const std::string NodeMonitor::nodeID = "node_X";
 
+NodeMonitor::NodeMonitor()
+{
+  lastNetworkStats.bytes_received = 0;
+  lastNetworkStats.packets_received = 0;
+  lastNetworkStats.bytes_sent = 0;
+  lastNetworkStats.packets_sent = 0;
+
+  lastCpuStats.nonidle = 0;
+  lastCpuStats.total = 0;
+}
+
 //grabs the first 3 lines from /proc/meminfo
 //In order: MemTotal, MemFree, MemAvailable
 double NodeMonitor::getMemUsage(){
@@ -82,18 +93,11 @@ cpu_usage NodeMonitor::getCurrentCpuStats(){
 }
 
 double NodeMonitor::getCpuUsage(){
-  cpu_usage firstStats;
-  firstStats = getCurrentCpuStats();
+  cpu_usage currentStats;
+  currentStats = getCurrentCpuStats();
 
-  // Sleep for one second
-  unsigned int seconds = 1;
-  sleep(seconds);
-
-  cpu_usage secondStats;
-  secondStats = getCurrentCpuStats();
-
-  double total = (double)(secondStats.total - firstStats.total);
-  double nonidle = (double)(secondStats.nonidle - firstStats.nonidle);
+  double total = (double)(currentStats.total - lastCpuStats.total);
+  double nonidle = (double)(currentStats.nonidle - lastCpuStats.nonidle);
 
   return nonidle/total;
 }
@@ -132,10 +136,15 @@ network_usage NodeMonitor::getNetworkUsage(){
 	}
       
       network_usage network;
-      network.bytes_received = bytesReceived;
-      network.packets_received = packetsReceived;
-      network.bytes_sent = bytesSent;
-      network.packets_sent = packetsSent;
+      network.bytes_received = bytesReceived - lastNetworkStats.bytes_received;
+      network.packets_received = packetsReceived - lastNetworkStats.packets_received;
+      network.bytes_sent = bytesSent - lastNetworkStats.bytes_sent;
+      network.packets_sent = packetsSent - lastNetworkStats.packets_sent;
+
+      lastNetworkStats.bytes_received = bytesReceived;
+      lastNetworkStats.packets_received = packetsReceived;
+      lastNetworkStats.bytes_sent = bytesSent;
+      lastNetworkStats.packets_sent = packetsSent;
       
       return network;
     }
@@ -145,12 +154,23 @@ network_usage NodeMonitor::getNetworkUsage(){
     }
 }
 
-int main(){
-  std::cout << "Current mem usage: " << NodeMonitor::getMemUsage() << std::endl;
-  std::cout << "Current storage usage: " << NodeMonitor::getStorageUsage() << std::endl;
-  std::cout << "Current cpu usage: " << NodeMonitor::getCpuUsage() << std::endl;
+void printStats(NodeMonitor &nm){
+  std::cout << "Current mem usage: " << nm.getMemUsage() << std::endl;
+  std::cout << "Current storage usage: " << nm.getStorageUsage() << std::endl;
+  std::cout << "Current cpu usage: " << nm.getCpuUsage() << std::endl;
   std::cout << "Current network usage: " << std::endl;
-  NodeMonitor::getNetworkUsage().print();
+  nm.getNetworkUsage().print();
+}
+
+int main(){
+  NodeMonitor nm;
+  printStats(nm);
+  // Sleep for one second
+  unsigned int seconds = 1;
+  sleep(seconds);
+  printStats(nm);
+  sleep(seconds);
+  printStats(nm);
   
   return 0;
 } 
