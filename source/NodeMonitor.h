@@ -40,12 +40,9 @@ struct cpu_usage
 
 class NodeMonitor{
  private:	
-  //LCM target URL
-  //const LCM_DEFAULT URL = ""
-
-  //LCM struct, holds system info
-  nodeLCM::sysresource_t data;
-
+  //LCM Channel
+  static const std::string LCM_CHANNEL;
+  
   // CPU constants
   static const int NUM_OF_CPU_COLS = 7;
 
@@ -66,6 +63,9 @@ class NodeMonitor{
   cpu_usage getCurrentCpuStats();
   
  public:
+
+  //LCM struct, holds system info
+  nodeLCM::sysresource_t data;
 
   // Default constructor
   NodeMonitor();
@@ -88,9 +88,6 @@ class NodeMonitor{
 
   // Prints current resource stats
   void printStats();
-
-  // update data fields and send data via LCM
-  void publishData(nodeLCM::sysresource_t &data);
 };
 
 #endif

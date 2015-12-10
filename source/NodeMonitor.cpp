@@ -5,6 +5,11 @@
 #include <lcm/lcm-cpp.hpp>
 #include "nodeLCM/sysresource_t.hpp"
 
+//LCM Channel
+const std::string LCM_CHANNEL = "NodeMonitor";
+// Number of seconds between sending messages
+static const int TIME_SLICE = 10;
+
 NodeMonitor::NodeMonitor()
 {
   std::cout << "Please enter an identifying tag for this node: ";
@@ -171,11 +176,6 @@ network_usage NodeMonitor::getNetworkUsage(){
     }
 }
 
-void NodeMonitor::publishData(nodeLCM::sysresource_t &data){
-  
-
-}
-
 void NodeMonitor::printStats(){
   std::cout << "Current mem usage: " << getMemUsage() << std::endl;
   std::cout << "Current storage usage: " << getStorageUsage() << std::endl;
@@ -186,28 +186,33 @@ void NodeMonitor::printStats(){
 
 int main(){
   
-  /*lcm::LCM lcm;
+  lcm::LCM lcm;
   if(!lcm.good()){
     std::cout << "Error creating LCM connection" << std::endl;
     return 1;
-  }*/
+  }
   
   NodeMonitor nm;
+  nodeLCM::sysresource_t data;
+  network_usage netData;
+  sleep(TIME_SLICE);
+  //Primary loop of program. Updates data values to the correct totals for the
+  //current time slice, then publishes data for receiver via LCM
+  while(true){
+    nm.data.memUsage = nm.getMemUsage();
+    nm.data.storageUsage = nm.getStorageUsage();
+    nm.data.cpuUsage = nm.getCpuUsage();
+    
+    netData = nm.getNetworkUsage();
+    nm.data.networkUsage[0] = netData.bytes_received;
+    nm.data.networkUsage[1] = netData.packets_received;
+    nm.data.networkUsage[2] = netData.bytes_sent;
+    nm.data.networkUsage[3] = netData.packets_sent;
 
-  // Make loop
-  // load data into "data" member
-  
-      
-  unsigned int seconds = 5;
+    lcm.publish(LCM_CHANNEL, &nm.data);
+    sleep(TIME_SLICE);
+  }
 
-  sleep(seconds);
-  nm.printStats();
 
-  sleep(seconds);
-  nm.printStats();
-
-  sleep(seconds);
-  nm.printStats();
-  
   return 0;
 } 
