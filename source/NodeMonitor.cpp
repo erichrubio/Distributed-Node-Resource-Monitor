@@ -8,7 +8,7 @@
 //LCM Channel
 const std::string LCM_CHANNEL = "NodeMonitor";
 // Number of seconds between sending messages
-static const int TIME_SLICE = 10;
+static const int TIME_SLICE = 1;
 
 NodeMonitor::NodeMonitor()
 {
@@ -20,17 +20,6 @@ NodeMonitor::NodeMonitor()
 
   //Initializes data in lastCpuStats struct
   getCpuUsage();
-
-  /*
-  lastNetworkStats.bytes_received = 0;
-  lastNetworkStats.packets_received = 0;
-  lastNetworkStats.bytes_sent = 0;
-  lastNetworkStats.packets_sent = 0;
-
-  lastCpuStats.nonidle = 0;
-  lastCpuStats.total = 0;
-  */
-
 }
 
 //grabs the first 3 lines from /proc/meminfo
